@@ -71,7 +71,6 @@ Before running any experiment sweep:
 - See `/paper-draft` and `/proofread` skills for full conventions.
 
 ### Git
-- Remote verification and push safety per `git-safety` rule
 - Check if a local copy exists before cloning any repo
 
 ## Skills (30)

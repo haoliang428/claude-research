@@ -12,24 +12,23 @@
 
 ## What Was Done Recently (Apr 13–18)
 
-1. Wrote complete 23-page paper: Abstract, Introduction, Literature Review (22 papers, integrated narrative), Methodology (4 subsections), Computational Experiments (7 figures, 4 tables), Conclusion
-2. Ran all experiments with validated numbers: B0–B5 full year, DRO sensitivity, capacity sensitivity (108%–210%), latency sensitivity (30/50/100ms), seasonal breakdown, DC utilisation
-3. Generated 7 publication-quality figures (PDF) embedded in paper
-4. Verified all 22 citations against literature notes — fixed 8 inaccuracies (Clover not spatial, Bashir operational vs lifecycle, Ning biomass not storage, etc.)
-5. Verified all 29 bibliography entries — fixed 8 issues (wrong authors, wrong titles, garbled names, misattributed solver citation)
-6. Ran paper-critic and domain-reviewer agents — fixed 3 critical issues (DRO radius computation 168^{-1/6}≈0.43 not 0.13, HiGHS citation, Dumas characterisation)
-7. Restructured project folder: notebooks/ → code/{experiments,eda,paper-figures,archive,lib}. Created shared library (code/lib/) with config, data, solvers, plotting modules
-8. Pushed to GitHub (haoliang428/ai-energy-ot)
+1. Wrote complete 23-page paper with all experiments validated and figures embedded
+2. Full quality audit: citation claims, bibliography, paper-critic, domain-reviewer — all issues fixed
+3. Restructured ai-energy-ot project: `code/lib/` shared library pattern
+4. Major overhaul of claude-research workspace: 38→30 skills, 6→5 agents, 9→7 rules, 8→4 hooks
+5. Added 8 new skills (paper-draft, experiment-runner, replication-check, venue-research, reading-notes, progress-log, council)
+6. Rewrote all docs, README, cleaned up stale code (.scripts/, .mcp-server-biblio/, llm-council)
+7. Wired up hooks in ~/.claude/settings.json, tested cli-council (Gemini + Claude working)
+8. Pushed both repos to GitHub
 
 ## Next Steps
 
-1. Choose target journal (Applied Energy vs Energy and AI vs Omega)
-2. Minor venue-specific formatting adjustments
-3. Final proofread pass
-4. Submit
+1. Choose target journal for ai-energy-ot (Applied Energy vs Energy and AI)
+2. Run `/proofread` + `/pre-submission-report` for final audit
+3. Submit paper
 
 ## Workspace Infrastructure
 
 - MCP bibliography server: configured in `.mcp.json` (OpenAlex + Scopus)
-- 38 skills, 6 agents, 9 rules — all functional
+- 30 skills, 5 agents, 7 rules, 4 hooks — all functional
 - Research Vault at `~/Research-Vault`
