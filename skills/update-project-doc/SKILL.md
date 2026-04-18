@@ -50,7 +50,7 @@ Collect the actual state of the project:
 5. **Symlink targets** — `readlink` on any documented symlinks
 6. **Context files** — read `.context/current-focus.md` or `.context/project-recap.md` if present
 
-**Task Management only** (detected by presence of `skills/` directory):
+**workspace only** (detected by presence of `skills/` directory):
 7. **Skill count** — count directories in `skills/` that contain `SKILL.md`
 8. **Hook count** — count `.sh` files in `hooks/` (if present)
 9. **Skill lengths** — `wc -l skills/*/SKILL.md` to identify bloated skills
@@ -59,7 +59,7 @@ Collect the actual state of the project:
 10. **CLAUDE.md line count** — `wc -l CLAUDE.md`
 11. **CLAUDE.md section sizes** — count lines per `##` section
 12. **README.md line count** — `wc -l README.md`
-13. **SKILL.md line counts** — (Task Management only) `wc -l skills/*/SKILL.md`
+13. **SKILL.md line counts** — (workspace only) `wc -l skills/*/SKILL.md`
 14. **Duplication scan** — check if CLAUDE.md content duplicates what's already in README.md, docs/, or .context/ files
 15. **Agent line counts** — `wc -l .claude/agents/*.md` (if present)
 16. **Context file line counts** — `wc -l .context/*.md` (if present)
@@ -76,12 +76,12 @@ Compare gathered state against documented content. Flag any mismatches:
 | **Next steps / roadmap** | Cross-reference items against recent commits and session logs — flag items that appear completed |
 | **Manuscript status** | Flag sections marked "TODO", "incomplete", or "placeholder" that now have content |
 | **Symlinks** | Verify documented symlink targets still resolve with `readlink` |
-| **Skill/hook counts** | (Task Management only) Compare actual count vs documented numbers in CLAUDE.md, README.md, and `.tex` files |
+| **Skill/hook counts** | (workspace only) Compare actual count vs documented numbers in CLAUDE.md, README.md, and `.tex` files |
 | **Venue/target info** | If CLAUDE.md documents a target journal, check it matches `.context/projects/_index.md` (if accessible) |
 
 ### Step 3b: Leanness Audit
 
-Using the data gathered in Step 2 (items 10-14), check infrastructure file sizes against thresholds. This applies to **all projects**, not just Task Management.
+Using the data gathered in Step 2 (items 10-14), check infrastructure file sizes against thresholds. This applies to **all projects**, not just workspace.
 
 | File | Threshold | What to flag | Fix |
 |------|-----------|-------------|-----|
@@ -183,12 +183,10 @@ Updated project docs:
 2. **Preserve research content** — hypotheses, questions, literature reviews, design decisions, and arguments are sacred. Only update factual/structural sections.
 3. **Always show before applying** — never make silent edits. The proposal step is mandatory.
 4. **Match existing style** — if the project uses `├──` trees, don't switch to `|--`. If counts use "X total", don't change to "X skills".
-5. **Works in any project** — not just Task Management. Adapt checks to what's present.
+5. **Works in any project** — not just workspace. Adapt checks to what's present.
 6. **Idempotent** — running twice in a row should produce no changes the second time.
 
 ## Cross-References
 
 - `/general-session-recap` — offers to run this skill at Step 3.5
-- `/sync-repo private` — Task Management-specific superset: propagates counts across all private TM docs including LaTeX files. Run after this skill when in the TM project.
-- `vault sync (edit vault files directly)` — syncs state to the central context library (complementary; run after this)
 - `/update-focus` — updates `current-focus.md` (different purpose: session state, not doc accuracy)

@@ -75,8 +75,9 @@ For every multi-step equation, proof, or algebraic manipulation:
 - **Are dimensions/types consistent?** Scalars should match scalars, vectors should match vectors. Matrix dimensions must be compatible.
 - **Are boundary/edge cases handled?** Division by zero, empty sets, degenerate cases.
 - **Approximation quality:** When approximations are used (`\approx`, Big-O), are error bounds stated or justified?
+- **Numerical computations:** When the paper computes a specific number (e.g., $N^{-1/n}$ for given $N$ and $n$), verify the arithmetic independently. Numerical errors in calibration formulas are easy to introduce and hard to spot by reading alone.
 
-Flag: Incorrect derivation steps as CRITICAL. Missing justification for a step as MAJOR. Notation inconsistency within derivations as MINOR.
+Flag: Incorrect derivation steps as CRITICAL. Numerical computation errors as CRITICAL. Missing justification for a step as MAJOR. Notation inconsistency within derivations as MINOR.
 
 ### Lens 3: Citation Fidelity
 
@@ -86,8 +87,10 @@ For every claim attributed to another paper:
 - **Is the result correctly characterised?** Watch for subtle differences (e.g., citing a result for i.i.d. data when the source assumes stationarity).
 - **Is the citation to the right paper?** Cross-reference against `.bib` entries — check author names, year, and title match.
 - **Are conditions from the cited result preserved?** If applying someone else's theorem, are their assumptions satisfied in your setting?
+- **Attribution scope:** Watch for conflating related but distinct arguments. For example, a paper that argues "operational vs lifecycle carbon" is different from one arguing "marginal vs average carbon" — citing the former for the latter's claim is a misattribution even though both are about carbon accounting.
+- **Application domain accuracy:** When citing a paper for its application domain (e.g., "energy storage scheduling"), verify that the cited paper actually addresses that domain. General theory papers are often miscategorised.
 
-Flag: Misrepresented citations as CRITICAL. Imprecise characterisation as MAJOR. Missing theorem/proposition number as MINOR.
+Flag: Misrepresented citations as CRITICAL. Imprecise characterisation as MAJOR. Wrong application domain as MAJOR. Missing theorem/proposition number as MINOR.
 
 ### Lens 4: Code-Theory Alignment
 
@@ -99,9 +102,11 @@ When code exists alongside the paper (in `code/`, `src/`, or project root):
 - **Output alignment:** Do the code's outputs (tables, figures) match what's reported in the paper?
 - **Random seeds and reproducibility:** Are seeds set? Would different seeds change conclusions?
 
+- **Cross-script consistency:** When multiple scripts implement variants of the same formulation (e.g., spatial LP and spatio-temporal LP), check that shared concepts (capacity, demand, constraints) are defined identically. Normalised fractions vs absolute units is a common source of silent divergence.
+
 If no code exists, report "Lens 4: N/A — no code found in project" and move on.
 
-Flag: Formula mismatch as CRITICAL. Variable definition mismatch as MAJOR. Missing seed as MINOR.
+Flag: Formula mismatch as CRITICAL. Variable definition mismatch as MAJOR. Cross-script inconsistency as MAJOR. Missing seed as MINOR.
 
 ### Lens 5: Backward Logic Check
 
@@ -150,7 +155,7 @@ This provides balance and helps the author see what's working well.
 
 ## Report Format
 
-Write the report to `reviews/domain-reviewer/YYYY-MM-DD_DOMAIN-REVIEW.md` in the **project root** (the directory containing the `.tex` files, NOT the Task Management directory). Create the `reviews/domain-reviewer/` directory if it does not exist. Do NOT overwrite previous reports — each review is dated.
+Write the report to `reviews/domain-reviewer/YYYY-MM-DD_DOMAIN-REVIEW.md` in the **project root** (the directory containing the `.tex` files, ). Create the `reviews/domain-reviewer/` directory if it does not exist. Do NOT overwrite previous reports — each review is dated.
 
 ```markdown
 # Domain Review
@@ -293,7 +298,6 @@ This agent supports **council mode** — multi-model deliberation where 3 differ
 
 **Invocation (CLI backend — default, free):**
 ```bash
-cd "$(cat ~/.config/task-mgmt/path)/packages/cli-council"
 uv run python -m cli_council \
     --prompt-file /tmp/domain-review-prompt.txt \
     --context-file /tmp/paper-content.txt \

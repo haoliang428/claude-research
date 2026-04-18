@@ -1,55 +1,35 @@
-<!-- Governed by: skills/shared/project-documentation.md -->
+# Bibliography MCP Server
 
-# Biblio MCP Server Setup
+Academic paper search across OpenAlex, Scopus, Semantic Scholar, and CORE. Already configured and working.
 
-The Biblio MCP server (`.mcp-server-biblio/`) provides scholarly search across up to 3 sources. OpenAlex is always available (free, no key required). Scopus and Web of Science are optional — add API keys to unlock them.
+## Configuration
 
-## 1. Update the Email Address
+Lives in `.mcp.json` at the workspace root. API keys are set there — do not duplicate them in docs.
 
-In `.mcp-server-biblio/server.py`:
+Enabled in `.claude/settings.local.json` via `"enabledMcpjsonServers": ["bibliography"]`.
 
-```python
-client = OpenAlexClient(email="your.email@university.edu")
+## Available Tools
+
+| Tool | What it does |
+|------|-------------|
+| `scholarly_search` | Cross-source keyword search (returns ranked, deduplicated table) |
+| `scholarly_paper_detail` | Metadata, abstract, TLDR for a specific paper |
+| `scholarly_citations` | Forward citation tracking (papers that cite X) |
+| `scholarly_references` | Backward citation tracking (papers cited by X) |
+| `scholarly_similar_works` | ML-based semantic similarity recommendations |
+| `scholarly_author_papers` | Fetch an author's publication list |
+| `scholarly_verify_dois` | Batch DOI verification with title matching |
+| `scholarly_source_status` | Check which API sources are active |
+
+## If Something Breaks
+
+```bash
+# Check which sources are active
+# (call scholarly_source_status from a Claude session)
+
+# Test the server directly
+cd packages/mcp-bibliography
+uv run python server.py
 ```
 
-OpenAlex uses this for its [polite pool](https://docs.openalex.org/how-to-use-the-api/rate-limits-and-authentication#the-polite-pool) — faster rate limits, no registration needed.
-
-## 2. Add the Server to Your Claude Code MCP Config
-
-In `.mcp.json` (project root) or `~/.claude.json` (global access):
-
-```json
-{
-  "mcpServers": {
-    "biblio": {
-      "command": "/opt/homebrew/bin/uv",
-      "args": ["run", "--frozen", "--directory", "/path/to/claude-research/.mcp-server-biblio", "python", "server.py"],
-      "env": {}
-    }
-  }
-}
-```
-
-## 3. (Optional) Add API Keys for Additional Sources
-
-| Source | Env var | How to get it |
-|--------|---------|---------------|
-| OpenAlex | None needed | Free — just set your email in step 1 |
-| Scopus | `SCOPUS_API_KEY` | [Elsevier Developer Portal](https://dev.elsevier.com/) — free for academic institutions |
-| Web of Science | `WOS_API_KEY` | [Clarivate Developer Portal](https://developer.clarivate.com/) — requires institutional subscription |
-
-Add keys to the `env` block:
-
-```json
-"env": {
-  "SCOPUS_API_KEY": "your-scopus-key",
-  "WOS_API_KEY": "your-wos-key",
-  "WOS_API_TIER": "expanded"
-}
-```
-
-The server auto-detects available keys at startup. With all 3 sources enabled, the `scholarly_*` tools deduplicate across sources and the `scholarly_verify_dois` tool cross-validates references.
-
-## 4. Use `/literature`
-
-Search for papers — the skill uses the biblio server automatically.
+If a source stops working, the API key in `.mcp.json` may have expired. OpenAlex is always free (email only). Scopus and CORE keys need periodic renewal.

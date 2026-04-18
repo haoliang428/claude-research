@@ -1,0 +1,6 @@
+- [User Profile](user_profile.md) — AI/ML engineer, energy economics researcher, prefers autonomous execution
+- [Working Style](feedback_working_style.md) — Run autonomously, stick to design, detailed explainers, notebooks for EDA
+- [Research Methods](feedback_research_methods.md) — Exact LP over Sinkhorn, proper Wasserstein DRO, validate metric choice
+- [Data Sources](reference_data_sources.md) — WattTime MOER, Azure traces, eGRID, PyPSA-USA, EJScreen
+- [Paper Writing Style](feedback_paper_writing_style.md) — No bullet findings, minimal em-dashes, flowing prose, no boilerplate
+- [Citation Rigor](feedback_citation_rigor.md) — Verify every citation against source notes before submission

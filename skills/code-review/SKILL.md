@@ -232,31 +232,13 @@ Start at 100, deduct per issue found, apply verdict. Insert the Score Block into
 [Things done well — important for morale and learning]
 ```
 
-## Council Mode (Optional)
+## Shared Library Check
 
-For complex codebases or high-stakes replication packages, run the code review across multiple LLM providers. Different models have different strengths: some excel at spotting statistical errors, others at code structure or reproducibility issues.
+If the project uses a `code/lib/` shared module pattern (config, data, solvers, plotting), additionally check:
 
-**Trigger:** "Council code review" or "thorough code review"
-
-**How it works:**
-1. Each model independently scores all 11 categories against the same scripts
-2. Cross-review: models evaluate each other's findings — catching false positives and missed issues
-3. Chairman synthesis: produces a single `CODE-REVIEW-REPORT.md` with the union of confirmed findings
-
-**Invocation (CLI backend):**
-```bash
-cd packages/cli-council
-uv run python -m cli_council \
-    --prompt-file /tmp/code-review-prompt.txt \
-    --context-file /tmp/scripts-content.txt \
-    --output-md /tmp/code-review-council.md \
-    --chairman claude \
-    --timeout 180
-```
-
-See `skills/shared/council-protocol.md` for the full orchestration protocol.
-
-**Value:** Moderate to high — most valuable for domain correctness (Category 5) and cross-language verification (Category 11), where different models may catch different statistical or logical errors.
+- **No duplicated solver functions** — all experiment scripts should import from `code/lib/solvers.py`, not copy-paste implementations
+- **Paths in config.py** — all paths should be relative to `PROJECT_ROOT`, not hardcoded absolute paths
+- **Consistent constants** — parameters should be defined in `config.py` and imported, not redefined in each script
 
 ## Cross-References
 

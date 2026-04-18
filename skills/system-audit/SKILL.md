@@ -46,7 +46,7 @@ Launch all 7 in a single message using parallel Task tool calls. Each sub-agent 
 
 **Context overflow prevention:** Instruct each sub-agent to keep its returned output concise — summary tables and key findings only (under 500 words). If detailed findings are large, the sub-agent should write them to a temp file (e.g., `/tmp/system-audit/sa-N.md`) and return only the file path + summary.
 
-All sub-agents receive shared context (Task Management root, research projects root, category directories). Full shared context block and all 6 sub-agent prompt templates:
+All sub-agents receive shared context (workspace root, research projects root, category directories). Full shared context block and all 6 sub-agent prompt templates:
 
 **[references/sub-agent-prompts.md](references/sub-agent-prompts.md)**
 
@@ -151,7 +151,6 @@ Show the user:
 | `/audit-project-research` | Complements Convention Compliance with deeper per-project checks |
 | `/update-project-doc` | Fix documentation staleness found by Documentation Freshness |
 | `/sync-permissions` | Fix symlink issues found by Inventory Auditor |
-| `/atlas-review` | Full cross-system audit (local + vault + Zotero + pipeline) — deeper than this sweep |
 | `/insights-deck` | Maintenance findings can feed into system insights presentations |
 | `/audit-doc santi` | Dedicated deep audit for santi-repo — Sub-agent 7 is a quick health check; the audit skill is the full version |
 | `/sync-santi-repo` | Fix freshness issues found by Sub-agent 7 |

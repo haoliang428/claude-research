@@ -218,37 +218,36 @@ Start at 100, deduct per issue found, apply verdict. Insert the Score Block into
 [Optional: overall observations about the writing — prioritise fixes by deduction size]
 ```
 
-## Council Mode (Optional)
+## Writing Style Checks
 
-For high-stakes pre-submission checks, run proofreading in council mode to get independent assessments from multiple LLM providers. Council mode surfaces formatting issues that any single model might miss.
+In addition to the standard categories, check for these style issues (per user preference):
 
-**Trigger:** "Council proofread my paper" or "thorough proofread"
+- **No bullet-point findings in Introduction** — results should be flowing prose
+- **Minimal em-dashes** — only where they do real structural work (~1 per 4 pages)
+- **No boilerplate** — no "The remainder of the paper is organised as follows"
+- **No "to our knowledge" claims** — cite the gap factually instead
+- **No stylistic italics** — keep \emph only for constraint/item labels in enumerations
+- **Flowing transitions** — sections should connect with transition sentences, not fragment with subsection headers (except Methodology where cross-references require labels)
+- **No abstract/intro duplication** — intro should add depth, not restate same numbers
 
-**How it works:**
-1. The main session reads the document and constructs the proofreading prompt
-2. The prompt is sent to 3 different models via `cli-council` (or `llm-council` for API mode)
-3. Each model independently runs the 7 check categories
-4. Cross-review identifies agreements and disputes
-5. Chairman synthesis produces a single `PROOFREAD-REPORT.md` with council notes
+## AI Pattern Density Check
 
-**Invocation (CLI backend — free with existing subscriptions):**
+After proofreading, run the AI pattern density scanner on the paper to check if it reads too "AI-generated":
+
 ```bash
-cd packages/cli-council
-uv run python -m cli_council \
-    --prompt-file /tmp/proofread-prompt.txt \
-    --context-file /tmp/paper-content.txt \
-    --output-md /tmp/proofread-council.md \
-    --chairman claude \
-    --timeout 180
+uv run python skills/proofread/ai_pattern_density.py paper/paper/main.tex
 ```
 
-See `skills/shared/council-protocol.md` for the full orchestration protocol.
+Thresholds (patterns per 100 words):
+- < 0.5: Excellent (indistinguishable from human)
+- 0.5–1.0: Good (minor patterns)
+- 1.0–2.0: Caution (may flag detectors)
+- \> 2.0: Rewrite needed
 
-**Value:** Diminishing returns for pure formatting — council mode is most valuable when combined with citation voice balance and notation consistency checks, where different models have genuinely different pattern recognition.
+If density is above 1.0, identify the flagged patterns and rewrite those sentences. Common AI patterns: "it is important to note", "plays a pivotal role", "a comprehensive overview", "leveraging", "delve into".
 
 ## Cross-References
 
 - **`/bib-validate`** — For thorough bibliography cross-referencing
-- **`/latex-autofix`** — For compilation and error resolution (run before proofreading to ensure the document compiles cleanly)
-- **Referee 2 agent** — For formal code + paper auditing
+- **`/latex-autofix`** — For compilation and error resolution (run before proofreading)
 - **`/devils-advocate`** — For argument quality and logical scrutiny

@@ -314,7 +314,6 @@ This agent supports **council mode** — multi-model deliberation where 3 differ
 
 **Invocation (CLI backend — default, free):**
 ```bash
-cd "$(cat ~/.config/task-mgmt/path)/packages/cli-council"
 uv run python -m cli_council \
     --prompt-file /tmp/referee2-prompt.txt \
     --context-file /tmp/referee2-paper-and-code.txt \

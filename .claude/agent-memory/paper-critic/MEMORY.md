@@ -1,0 +1,1 @@
+- [ai-energy-ot patterns](ai-energy-ot-patterns.md) -- Recurring issues found in the AI Energy OT paper (citation misattributions, DRO interpretation)

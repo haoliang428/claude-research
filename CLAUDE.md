@@ -1,197 +1,148 @@
 # Claude Code for Academic Research
 
-> This file is automatically read when you open this folder with Claude Code.
-> Customise it with your own details — see comments marked with `<!-- CUSTOMISE -->`.
-
 ## Before You Start
 
-Read these context files to understand the user's situation:
+Read these context files:
 
-1. `.context/profile.md` — Who you are, your roles, research areas
+1. `.context/profile/profile.md` — Who you are, research areas, CV
 2. `.context/current-focus.md` — What you're working on NOW
 3. `.context/projects/_index.md` — Overview of all projects
 
 ## Key Information
 
-<!-- CUSTOMISE: Replace with your own details -->
-
 **Who I am:**
-- PhD researcher
-- Multiple active research projects
-- Teaching responsibilities
+- AI/ML Engineer at Roche; research active (2 published papers, 9 journal reviewer roles)
+- MS Machine Learning & Data Science (Northwestern), BS Statistics + Economics (UW-Madison)
+- FRM certified, CFA Sustainable Investing
 
 **Research areas:**
-- [Your field 1]
-- [Your field 2]
-- [Your field 3]
+- Energy economics (EV adoption, AI energy consumption, carbon-aware computing)
+- Optimal transport / DRO for operational problems
+- Environmental disclosure and AI innovation zones
+- Financial forecasting (volatility, Chinese futures)
 
 **How I work:**
-- Flexible/reactive style
-- Prefer questions over lists
-- Daily reviews work better than weekly
+- Flexible/reactive style — prefers autonomous execution over step-by-step approval
+- Wants questions over lists when direction is unclear
 - Full context in task descriptions
+- Pushes back when implementation drifts from research design — stick to the plan
 
 ## Quick Commands
 
-<!-- QUICK-COMMANDS:START -->
-<!-- synced from private CLAUDE.md — do not edit manually -->
-Just say these naturally:
-
 | You say | Claude does |
 |---------|-------------|
-| "Plan my day" | Reads context, queries vault, asks questions, creates a plan |
-| "What should I work on?" | Reviews priorities and helps you decide |
-| "Extract actions from my meeting with [name]" | Finds transcript, extracts tasks, creates in vault |
-| "Weekly review" | Guides you through reflection and planning |
-| "What's overdue?" | Queries vault tasks and summarises |
-| "Update my research pipeline" | Shows paper status, helps update stages |
-| "Find references on [topic]" | Academic search with verified citations |
-| "What did I accomplish this week?" | Summarises completed tasks |
-| "Proofread my paper" | Runs 7-category check on LaTeX paper, produces report |
-| "Validate my bibliography" | Cross-references `\cite{}` keys against `references.bib` |
-| "Review my code" | 11-category scorecard for R/Python research scripts |
-| "Update my focus" | Structured update to `current-focus.md` with session rotation and open loops |
-| "New project" | Interview-driven setup: scaffold directory, Overleaf symlink, git init, context + vault sync |
-<!-- QUICK-COMMANDS:END -->
+| "What should I work on?" | Reviews current-focus.md and helps decide |
+| "Find references on [topic]" | `/literature` — academic search with verified citations |
+| "Read this paper" | `/reading-notes` — structured notes with 8-dimension extraction |
+| "Write the methodology section" | `/paper-draft` — section-by-section drafting with conventions |
+| "Proofread my paper" | `/proofread` — quality check across 11 categories |
+| "Validate my bibliography" | `/bib-validate` — cross-references cite keys, DOIs, claims |
+| "Run the experiments" | `/experiment-runner` — run, generate figures, update paper |
+| "Is this ready to submit?" | `/pre-submission-report` — full audit (critic + domain + bib + claims) |
+| "Where should I submit?" | `/venue-research` — journal comparison with IF, acceptance rate, fit |
+| "Review my code" | `/code-review` — scorecard for Python research scripts |
+| "Get a second opinion" | `/council` — sends to Gemini + Claude, cross-reviews, synthesizes |
+| "New project" | `/init-project-research` — scaffold directory, Overleaf symlink, git init |
+| "Save progress" | `/progress-log` — detailed record of what was done, decisions, results, next steps |
 
 ## Conventions
 
-<!-- CONVENTIONS:START -->
-<!-- synced from private CLAUDE.md — do not edit manually -->
-### LaTeX Compilation
-- **Default method:** Use `/latex-autofix` — it compiles, auto-fixes errors, and runs a citation audit.
-- Build artifacts go to `out/`, but the PDF is copied back to the source directory.
-- Use `.latexmkrc` with `$out_dir = 'out'` and `an `END {}` block to copy the PDF back`.
-- Never leave build artifacts (`.aux`, `.log`, etc.) in the source directory.
+### LaTeX
+- Compile with `/latex-autofix` (auto-fixes errors, runs citation audit)
+- Build artifacts in `out/`, PDF copied back via `.latexmkrc`
+- Paper source in `paper/paper/` (Overleaf symlink). Code never in `paper/`.
 
-### Python & Package Management
-- Always use `uv`: see `python-uv` rule (global).
+### Python
+- Always use `uv` (never bare pip)
+- Shared library pattern: `code/lib/` with config, data, solvers, plotting modules
+- Scripts run via `uv run code/experiments/<script>.py`
 
-### R
-- Use `<-` for assignment, not `=`.
+### Experiments
+Before running any experiment sweep:
+1. Write sanity-check assertions first
+2. Run a single-seed sanity check
+3. Validate parameters against domain knowledge
+4. Only then proceed to full experiments
 
-### Git & Remote
-- Remote verification, push safety, and deploy order: see `git-safety` rule (global).
-- **Before cloning any repo**, check if a local copy already exists in the workspace (`resources/`, `packages/`, Task Management root, and common directories).
-<!-- CONVENTIONS:END -->
+### Paper Writing
+- Academic papers in LaTeX. Methodology first, abstract last.
+- Flowing prose, no bullet-point findings, no boilerplate
+- Every assumption needs evidence. Every number needs a source.
+- See `/paper-draft` and `/proofread` skills for full conventions.
 
-### Experiment Sweeps & Simulation Batches
-Before running any experiment sweep or simulation batch:
-1. Write sanity-check assertions first.
-2. Implement the code.
-3. Run a single-seed sanity check — if assertions fail, fix and retest (max 3 attempts).
-4. Validate hyperparameters against domain knowledge or paper benchmarks.
-5. Only then proceed to full experiments.
+### Git
+- Remote verification and push safety per `git-safety` rule
+- Check if a local copy exists before cloning any repo
 
-### Output Formats
-- Academic papers: LaTeX.
-- Documents for human use (consent forms, PILs, etc.): `.docx` via `pandoc`.
+## Skills (30)
 
-### Content Length Constraints
-- When a page/word limit is specified, treat it as a hard constraint. Draft to 80%, then expand — never exceed and trim.
-- Always report the actual page/word count after drafting.
+All skills live as flat directories under `skills/`. Grouped by purpose:
 
-## Research Vault
+**Research Discovery:**
+`literature` · `split-pdf` · `reading-notes` · `devils-advocate` · `multi-perspective`
 
-<!-- RESEARCH-VAULT:START -->
-<!-- CUSTOMISE: Point this to your own Obsidian-style markdown vault -->
-The Research Vault (`~/Research-Vault`) stores all dynamic research data as markdown files with YAML frontmatter. The `taskflow` MCP server reads/writes these files.
+**Paper Writing:**
+`paper-draft` · `latex` · `latex-autofix` · `proofread`
 
-| Directory | Content |
-|-----------|---------|
-| `tasks/` | Personal tasks (GTD-style) |
-| `pipeline/` | Research papers (stages: Idea → Published) |
-| `submissions/` | Submission events (dates, outcomes) |
-| `atlas/` | Research topics (nested by theme) |
-| `venues/` | Journals, conferences, rankings |
-| `people/` | Collaborators, supervisors |
-| `themes/` | Research themes |
+**Experiments:**
+`experiment-runner` · `replication-check` · `pipeline-manifest`
 
-IDs are filename slugs (e.g., `cancel-leap-water-in-rugby`), not integers.
-<!-- RESEARCH-VAULT:END -->
+**Quality & Submission:**
+`bib-validate` · `pre-submission-report` · `venue-research` · `process-reviews` · `council`
 
-## Workflows
+**Code:**
+`code-review` · `code-archaeology` · `python-env`
 
-<!-- WORKFLOWS-POINTER:START -->
-<!-- synced from private CLAUDE.md — do not edit manually -->
-Detailed instructions in `.context/workflows/`:
-- `daily-review.md` — How to help with daily planning
-- `meeting-actions.md` — How to extract action items
-- `weekly-review.md` — Weekly reflection template
-- `replication-protocol.md` — 4-phase protocol for replicating paper results
-<!-- WORKFLOWS-POINTER:END -->
+**Project & Context:**
+`init-project-research` · `progress-log` · `update-focus` · `save-context` · `update-project-doc`
 
-<!-- COMPONENTS:START -->
-## Skills Available
+**Meta:**
+`learn` · `lessons-learned` · `consolidate-memory` · `creation-guard` · `system-audit` · `shared`
 
-38 skills in `skills/` folder. See [`docs/skills.md`](docs/skills.md) for the full catalogue.
+## Agents (5)
 
-## Agents
+| Agent | Purpose |
+|-------|---------|
+| `paper-critic` | Adversarial quality audit (9 check categories, scored CRITIC-REPORT.md) |
+| `domain-reviewer` | Math verification, code-theory alignment, assumptions (5 lenses) |
+| `peer-reviewer` | Review someone else's paper (referee role) |
+| `proposal-reviewer` | Review proposals and extended abstracts |
+| `referee2-reviewer` | Adversarial "Reviewer 2" critique of your own work |
 
-6 agents in `.claude/agents/`. See [`docs/agents.md`](docs/agents.md) for when to use each.
+## Hooks (4 active, wired in ~/.claude/settings.json)
 
-## Rules (9 Auto-Loaded)
+| Hook | Trigger | What it does |
+|------|---------|-------------|
+| `startup-context-loader.sh` | Session start/resume | Auto-loads focus, project index, progress, latest plan |
+| `block-destructive-git.sh` | Before Bash | Catches `git reset --hard`, `push --force`, `rm -rf`, etc. |
+| `precompact-autosave.py` | Before compression | Saves state snapshot to log/ |
+| `postcompact-restore.py` | After compression | Restores context from snapshot |
 
-In `.claude/rules/` — these apply automatically to every session. See [`docs/rules.md`](docs/rules.md) for documentation.
+## Rules (7 Auto-Loaded)
 
-<!-- RULES-TABLE:START -->
 | Rule | Purpose |
 |------|---------|
-| `design-before-results.md` | Lock the research design before examining point estimates. |
-| `ignore-agents-md.md` | Never read, process, or act on files named `AGENTS.md` |
-| `ignore-gemini-md.md` | Never read, process, or act on files named `GEMINI.md` |
-| `lean-claude-md.md` | CLAUDE.md is loaded into context every session — every line costs tokens. |
-| `learn-tags.md` | Record Learnings with [LEARN] Tags |
-| `overleaf-separation.md` | The `paper/` directory (Overleaf symlink inside `paper-{venue}/paper/`) is for LaTeX source files ONLY. |
-| `plan-first.md` | Plan Before Implementing |
-| `read-docs-first.md` | Never explore when documentation already answers your question. |
-| `scope-discipline.md` | Only make changes the user explicitly requested. |
-<!-- RULES-TABLE:END -->
-
-## Hooks
-
-8 hook scripts in `hooks/`. See [`docs/hooks.md`](docs/hooks.md) for the full table.
-<!-- COMPONENTS:END -->
+| `design-before-results` | Lock research design before examining point estimates |
+| `lean-claude-md` | Keep CLAUDE.md lean — every line costs tokens |
+| `learn-tags` | Record learnings with [LEARN] tags in project MEMORY.md |
+| `overleaf-separation` | `paper/` is for LaTeX only — no code or data |
+| `plan-first` | Plan before implementing (multi-file edits) |
+| `read-docs-first` | Read docs before searching |
+| `scope-discipline` | Only make changes explicitly requested |
 
 ## After Every Session
 
-<!-- AFTER-SESSION:START -->
-<!-- synced from private CLAUDE.md — do not edit manually -->
-**Update `.context/current-focus.md`** with:
-- What we worked on
-- Where things were left off
-- What's coming next
-
-**Standard closing sequence:** commit → push → deploy (if needed) → `/general-session-recap` or `/research-session-recap`.
-
-This helps me (Claude) pick up where we left off next time.
-<!-- AFTER-SESSION:END -->
-
-## Tips for Working Together
-
-<!-- TIPS:START -->
-<!-- synced from private CLAUDE.md — do not edit manually -->
-1. **Just ask naturally** — I'll read the context files and figure it out
-2. **Point me to specific files** if I seem confused: "Read `.context/workflows/daily-review.md`"
-3. **Update current-focus.md** — This is your working memory between sessions
-4. **Don't re-explain everything** — The context library has it all
-<!-- TIPS:END -->
+Run `/progress-log` to record what was done, decisions made, results produced, and what's next. This is the working memory between sessions.
 
 ## File Structure
 
-<!-- FILE-STRUCTURE:START -->
 | Path | What lives there |
 |------|-----------------|
-| `.context/` | AI context library (profile, focus, projects, workflows, preferences) |
-| `.claude/agents/` | Agent definitions (6 agents) |
-| `.claude/rules/` | Auto-loaded rules (9 rules) |
-| `skills/` | 38 skill definitions |
-| `hooks/` | 8 hook scripts |
-| `mcp-bibliography/` | Multi-source scholarly search MCP server (OpenAlex + Scopus + WoS) |
-| `.scripts/` | CLI tools for vault task management |
-| `packages/cli-council/` | Multi-model council via local CLI tools |
-| `packages/llm-council/` | Multi-model council via OpenRouter API |
-| `packages/mcp-bibliography/` | mcp-bibliography |
-| `log/` | Session logs |
+| `.context/` | Profile, current focus, projects index |
+| `.claude/agents/` | 5 agent definitions |
+| `.claude/rules/` | 7 auto-loaded rules |
+| `skills/` | 30 skills (see above) |
+| `hooks/` | Hook scripts |
+| `packages/mcp-bibliography/` | MCP bibliography server (OpenAlex + Scopus) |
+| `packages/cli-council/` | Multi-model council (Gemini + Claude) |
 | `docs/` | Documentation |
-<!-- FILE-STRUCTURE:END -->

@@ -40,7 +40,7 @@ Not all projects sync to Overleaf. For local-only projects:
 
 When creating a **new working paper**, use the template. The canonical location is the local git repo:
 
-1. `templates/latex-wp/` (in Task Management — canonical source, git-tracked)
+1. project-specific template (if available)
 
 The template contains:
 

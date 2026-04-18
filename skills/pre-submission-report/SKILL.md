@@ -1,153 +1,138 @@
 ---
 name: pre-submission-report
 description: "Use when you need all quality checks run before submission, producing a single dated report."
-allowed-tools: Bash(latexmk*, mkdir*, ls*, wc*), Read, Write, Edit, Glob, Grep, Task, Skill
+allowed-tools: Bash(latexmk*, mkdir*, ls*, wc*), Read, Write, Edit, Glob, Grep, Task, Skill, mcp__bibliography__scholarly_search, mcp__bibliography__scholarly_verify_dois
 argument-hint: "[path/to/main.tex or no arguments to auto-detect]"
 ---
 
 # Pre-Submission Report
 
-> Aggregates all quality checks into one dated report. Run before submitting to a journal/conference or sharing with collaborators.
+Run all quality checks before submitting to a journal. Produces a single dated report.
 
 ## When to Use
 
 - Before submitting a paper to a venue
-- Before sharing a draft with supervisors or co-authors
-- When the user says "pre-submission check", "is this ready?", "run everything"
+- Before sharing a draft with co-authors
+- "Is this ready?", "run everything", "pre-submission check"
 
-## Input
-
-- A `.tex` file path, or auto-detect `paper/main.tex` in the current project
-
-## Critical Rule
-
-**Python:** Always use `uv run python` or `uv pip install`. Never bare `python`, `python3`, `pip`, or `pip3`. Include this in any sub-agent prompts.
-
-## Steps
+## Workflow
 
 ### 1. Locate the Paper
 
 If no argument provided, search for the main `.tex` file:
-1. Check `paper/main.tex`
-2. Check `paper/*.tex` for a file containing `\begin{document}`
-3. Ask the user if ambiguous
+1. Check `paper/paper/main.tex`
+2. Check `paper/*.tex` for `\begin{document}`
+3. Ask if ambiguous
 
-### 2. Integrity Gate (hard gate — must pass before quality checks)
+### 2. Integrity Gate (must pass before quality checks)
 
-Run these checks first. If any fail, stop and report — do not proceed to quality checks.
+Quick checks that block submission:
 
-1. **Placeholder scan** — grep the `.tex` file(s) for `TODO`, `FIXME`, `XXX`, `TBD`, `[INSERT`, `PLACEHOLDER`, `Lorem ipsum`. Any match is a FAIL.
-2. **Citation integrity** — invoke `/bib-validate` in verify mode. Every `\cite{}` key must resolve to a `.bib` entry. Any missing key is a FAIL.
-3. **Section completeness** — check that all standard sections exist and are non-empty (Abstract, Introduction, and at least one body section before Conclusion/References). An empty or missing section is a FAIL.
-4. **Broken references** — grep for `??` in the compiled PDF output or `.log` file (undefined `\ref{}` or `\cite{}`). Any `??` in output is a FAIL.
+1. **Placeholder scan** — grep for `TODO`, `FIXME`, `XXX`, `TBD`, `[INSERT`, `PLACEHOLDER`
+2. **Section completeness** — Abstract, Introduction, at least one body section, Conclusion all exist and non-empty
+3. **Broken references** — grep compiled `.log` for undefined `\ref` or `\cite` warnings
+4. **Citation integrity** — run `/bib-validate` standard mode. Every `\cite{}` must resolve.
 
-**If any check fails:**
-```
-INTEGRITY GATE: FAIL
+If any fail, stop and report blockers. Do not proceed to quality checks.
 
-Blockers (must fix before quality checks):
-  - [ ] 3 TODO placeholders found (lines 47, 112, 289)
-  - [ ] 2 undefined references (\ref{fig:missing}, \cite{nonexistent2024})
-  - [ ] Abstract section is empty
+### 3. Quality Checks (run in parallel where possible)
 
-Fix these and re-run /pre-submission-report.
-```
+Launch these as parallel agents:
 
-**If all pass:** proceed to Step 3.
+**Check A: Paper Critic** — launch `paper-critic` agent
+- Scores content quality, identifies structural issues
+- Produces CRITIC-REPORT.md with scored issues
 
-### 3. Run Quality Checks
+**Check B: Domain Review** — launch `domain-reviewer` agent
+- Verifies mathematical derivations against code
+- Checks assumption completeness
+- Validates notation consistency
+- Produces DOMAIN-REVIEW.md
 
-Run these sequentially (each depends on a clean state):
+**Check C: Bibliography Deep Validation** — run `/bib-validate deep`
+- DOI verification with title matching
+- Preprint staleness check
+- Entry type correctness
+- Author completeness
 
-1. **Compilation** — invoke `/latex-autofix` on the main `.tex` file. Record pass/fail and any remaining warnings.
-2. **Citation audit** — invoke `/bib-validate` (full mode — deep verify). Record missing, unused, and suspect keys.
-3. **Adversarial review** — launch `paper-critic` agent (via Task tool). Capture the CRITIC-REPORT.md score and findings.
+**Check D: Citation Claim Verification** — run `/bib-validate claims`
+- For each citation, verify the claim in the paper matches what the cited paper actually says
+- Cross-reference against reading notes in `docs/readings/notes/`
+- This catches the most damaging errors (misattributions that reviewers will flag)
+
+**Check E: Compilation** — run `latexmk -pdf`
+- Record warnings count
+- Check for overfull/underfull hboxes
 
 ### 4. Aggregate Report
 
-Save to `audits/quality-reports/YYYY-MM-DD_<project-name>.md`:
+Save to `reviews/pre-submission/YYYY-MM-DD_report.md`:
 
 ```markdown
-# Pre-Submission Quality Report
+# Pre-Submission Report
 
-**Project:** <project name>
+**Project:** <name>
 **Date:** YYYY-MM-DD
-**File:** <path to main.tex>
-**Target:** <venue from project CLAUDE.md, or "not specified">
-
----
+**File:** <path>
+**Target venue:** <venue>
+**Page count:** <N>
 
 ## Integrity Gate: PASS / FAIL
 
-- **Placeholders:** 0 found
-- **Citation integrity:** all keys resolved
-- **Section completeness:** all sections present
-- **Broken references:** none
+- Placeholders: <count>
+- Section completeness: PASS / <missing sections>
+- Broken references: <count>
+- Citation integrity: <missing keys>
 
----
+## Quality Checks
 
-## Overall Score: XX/100 — [Verdict]
+### Paper Critic (Score: XX/100)
+- Critical issues: <count>
+- Major issues: <count>
+- Top 3 issues: ...
 
-Verdict uses the quality scoring framework:
-- 90-100: Publication-ready
-- 80-89: Minor revisions needed
-- 70-79: Significant revisions needed
-- Below 70: Not ready
+### Domain Review
+- Math errors: <count>
+- Assumption gaps: <count>
+- Code-theory mismatches: <count>
+- Top issues: ...
 
----
+### Bibliography
+- DOI issues: <count>
+- Preprint staleness: <count>
+- Incomplete entries: <count>
 
-## Compilation
+### Citation Claims
+- Misattributions found: <count>
+- Severity breakdown: <critical/major/minor>
+- Top issues: ...
 
-- **Status:** PASS / FAIL
-- **Warnings:** <count>
-- **Details:** <brief summary of any issues>
-
-## Citations
-
-- **Missing keys:** <count> — <list>
-- **Unused keys:** <count> — <list>
-- **Suspect entries:** <count> — <list>
-
-## Adversarial Review
-
-- **Score:** XX/100
-- **Key findings:**
-  - <finding 1>
-  - <finding 2>
-  - ...
-
-## Research Quality Score
-
-Load `skills/shared/research-quality-rubric.md` and report the weighted aggregate (X.X / 5.0) with verdict.
-
-## Remaining Issues
-
-| # | Severity | Category | Issue |
-|---|----------|----------|-------|
-| 1 | High/Medium/Low | Compilation/Citation/Content | <description> |
+### Compilation
+- Status: PASS / FAIL
+- Warnings: <count>
 
 ## Recommendation
 
 **[Submit / Revise / Not ready]**
 
-<1-2 sentence summary of what needs to happen before submission>
+<summary of what needs to happen>
 ```
 
 ### 5. Present Summary
 
-Display the report path and the summary table to the user. If the recommendation is "Submit", congratulate. If "Revise", list the top 3 issues to fix first.
+Display the report path and recommendation. If "Revise", list issues by priority (critical first). If "Submit", confirm the paper is ready.
 
-## Error Handling
+## Key Lesson
 
-- If compilation fails after `/latex-autofix`, still run the remaining checks. Mark compilation as FAIL in the report.
-- If `paper-critic` agent fails, note it in the report and base the overall score on compilation + citations only.
-- Always produce the report file, even if some checks failed.
+The citation claim check (Check D) is the most important non-obvious check. Citation claims can be inaccurate even when all papers are real and all DOIs are valid (e.g., attributing a finding to a paper that makes a different argument, or calling a single-site method "spatial shifting"). A reviewer who knows the cited paper would flag the misattribution immediately.
 
 ## Integration
 
-| Skill/Agent | Role in this workflow |
-|-------------|---------------------|
-| `/latex-autofix` | Compilation + auto-fix |
-| `/bib-validate` | Citation cross-reference |
-| `paper-critic` agent | Adversarial content review |
-| `quality-scoring.md` | Verdict thresholds |
+| Check | Tool/Agent |
+|-------|-----------|
+| Paper Critic | `paper-critic` agent |
+| Domain Review | `domain-reviewer` agent |
+| Bibliography | `/bib-validate deep` |
+| Citation Claims | `/bib-validate claims` |
+| Compilation | `/latex-autofix` |
+| Proofreading | `/proofread` (optional, run separately) |

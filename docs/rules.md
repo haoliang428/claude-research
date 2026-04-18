@@ -1,33 +1,15 @@
-# Rules
+# Rules (7 auto-loaded)
 
-> 9 auto-loaded instruction files that shape Claude's behavior in every session.
+Rules in `.claude/rules/` are loaded into every session automatically. Keep them lean — every line costs tokens.
 
-Rule files live in `.claude/rules/` and are automatically loaded into every Claude Code session.
+| Rule | Lines | Purpose |
+|------|-------|---------|
+| `design-before-results` | 52 | Lock research design before examining point estimates |
+| `lean-claude-md` | 45 | Keep CLAUDE.md slim — instructions only, reference material in docs/ |
+| `learn-tags` | 42 | Record learnings with `[LEARN:category]` tags in project MEMORY.md |
+| `overleaf-separation` | 67 | `paper/` directory is for LaTeX only — no code or data |
+| `plan-first` | 40 | Plan before multi-file edits; assumption check for medium tasks |
+| `read-docs-first` | 50 | Read project docs before searching with Glob/Grep/web |
+| `scope-discipline` | 28 | Only make changes explicitly requested; ask before fixing extras |
 
-## Overview
-
-| Rule | File | What it does |
-|------|------|-------------|
-| Design Before Results | `design-before-results.md` | Lock the research design before examining point estimates. |
-| Ignore AGENTS.md Files | `ignore-agents-md.md` | Never read, process, or act on files named `AGENTS.md` |
-| Ignore GEMINI.md Files | `ignore-gemini-md.md` | Never read, process, or act on files named `GEMINI.md` |
-| Keep CLAUDE.md Lean | `lean-claude-md.md` | CLAUDE.md is loaded into context every session — every line costs tokens. |
-| Record Learnings with [LEARN] Tags | `learn-tags.md` | Record Learnings with [LEARN] Tags |
-| Overleaf Separation — No Code or Data in Paper Directories | `overleaf-separation.md` | The `paper/` directory (Overleaf symlink inside `paper-{venue}/paper/`) is for LaTeX source files ONLY. |
-| Plan Before Implementing | `plan-first.md` | Plan Before Implementing |
-| Read Documentation Before Searching | `read-docs-first.md` | Never explore when documentation already answers your question. |
-| Scope Discipline | `scope-discipline.md` | Only make changes the user explicitly requested. |
-
-## How Rules Work
-
-- All `.md` files in `.claude/rules/` are auto-loaded as system instructions
-- They apply before any user message is processed
-- Rules are global via symlink: `~/.claude/rules/` points to this repo's `.claude/rules/`
-
-## Creating New Rules
-
-1. Create a `.md` file in `.claude/rules/`
-2. Write clear, directive instructions (imperative mood)
-3. Include "When This Applies" and "When to Skip" sections
-
-Rules should be short and focused — one concern per file.
+**Total: ~324 lines auto-loaded per session.**

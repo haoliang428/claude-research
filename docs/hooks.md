@@ -1,38 +1,20 @@
-# Hooks
+# Hooks (4 active)
 
-> 8 hook scripts that run automatically at key moments in Claude Code sessions.
-
-Hook scripts live in `hooks/` and are configured in `~/.claude/settings.json` under the `"hooks"` key.
-
-## Overview
+Configured in `~/.claude/settings.json`. Scripts live in `hooks/` (symlinked from `~/.claude/hooks/`).
 
 | Hook | Trigger | What it does |
 |------|---------|-------------|
-| `block-destructive-git.sh` | Before Bash | catches dangerous git/shell commands |
-| `context-monitor.py` | After tool use | tracks tool call count as a heuristic for context usage |
-| `postcompact-restore.py` | After compact | restores state after context compression |
-| `precompact-autosave.py` | Before compact | saves state before context compression |
-| `promise-checker.sh` | Session stop | catches "performative compliance": Claude says it remembered/noted/saved |
-| `protect-source-files.sh` | Before edit/write | prompts confirmation for files outside |
-| `resume-context-loader.sh` | Session resume | surfaces current focus and latest session log |
-| `startup-context-loader.sh` | Session start | auto-detects and surfaces project documentation |
+| `startup-context-loader.sh` | Session start/resume | Auto-loads focus, project index, progress, latest plan |
+| `block-destructive-git.sh` | Before Bash commands | Catches `git reset --hard`, `push --force`, `rm -rf` |
+| `precompact-autosave.py` | Before context compression | Saves state snapshot to project's `log/` |
+| `postcompact-restore.py` | After context compression | Restores context from snapshot |
 
-## Hook Events
+## How Hooks Work
 
-| Event | When it fires | Matcher options |
-|-------|---------------|-----------------|
-| `SessionStart` | Session begins | `startup` (fresh), `resume` (continuing), `compact` (after compaction) |
-| `PreToolUse` | Before a tool runs | Tool name(s), e.g. `Bash`, `Edit\|Write` |
-| `PostToolUse` | After a tool runs | Tool name(s), e.g. `Bash\|Task` |
-| `Stop` | Claude stops responding | *(empty = always)* |
-| `PreCompact` | Before context compression | *(empty = always)* |
+Hooks are shell/Python scripts that Claude Code runs automatically at specific lifecycle events. They receive JSON on stdin and can output JSON to influence behavior (e.g., inject context, block a command, or ask for confirmation).
 
-## Configuration
+## Adding a Hook
 
-All hooks are configured in `~/.claude/settings.json`. See the `settings.json` file for the full configuration.
-
-## Creating New Hooks
-
-1. Write a shell or Python script in `hooks/`
-2. Add an entry to `~/.claude/settings.json` under the appropriate event key
-3. Set the `matcher` to control when it fires
+1. Write the script in `hooks/`
+2. Add the trigger config to `~/.claude/settings.json` under `hooks.<EventName>`
+3. Make it executable: `chmod +x hooks/your-hook.sh`

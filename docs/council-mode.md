@@ -1,36 +1,47 @@
-<!-- Governed by: skills/shared/project-documentation.md -->
+# Council Mode (Gemini + Claude)
 
-# Council Mode
+Multi-model deliberation using `cli-council`. Sends the same task to Gemini and Claude independently, cross-reviews, and synthesizes.
 
-Claude Code can invoke other LLM providers' CLI tools as subprocess reviewers — a different model reviews work that Claude produced, providing genuine architectural diversity (different training data, reasoning patterns, and blind spots). The system is extensible: any CLI tool that accepts a prompt and returns text can be wrapped as a backend (~20 lines of Python).
+## How It Works
 
-Council mode coordinates this into a structured 3-stage protocol: independent assessments from multiple LLM providers, anonymised cross-review, then chairman synthesis. Used by the `paper-critic` agent and optionally by `/proofread`, `/devils-advocate`, `/code-review`, and `/multi-perspective`.
+1. **Stage 1:** Gemini and Claude independently answer the same prompt
+2. **Stage 2:** Each model reviews the other's answer (anonymized)
+3. **Stage 3:** Chairman (Claude) synthesizes the final answer
 
-See `skills/shared/council-protocol.md` for the full orchestration protocol.
+## Prerequisites
 
-## CLI Council (`packages/cli-council/`) — Free
+- Gemini CLI installed and authenticated (`gemini` on PATH)
+- Claude Code installed (`claude` on PATH)
 
-Uses local CLI tools with existing subscriptions (no per-token cost). Backends are pluggable — adding a new provider follows the `BackendSpec` pattern:
+Check availability:
+```bash
+cd packages/cli-council && uv run python -m cli_council --check
+```
 
+## Usage
+
+### Via `/council` skill (recommended)
+Just say "council proofread my paper" or "get a second opinion on this methodology."
+
+### Via command line
 ```bash
 cd packages/cli-council
-pip install -e .
-python -m cli_council --check  # verify which CLI backends are available
+uv run python -m cli_council \
+    --prompt-file /tmp/prompt.txt \
+    --context-file /tmp/context.txt \
+    --output-md /tmp/result.md \
+    --chairman claude \
+    --timeout 180
 ```
 
-Currently available backends:
-- [Gemini CLI](https://github.com/google-gemini/gemini-cli) — `npm install -g @google/gemini-cli`
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — useful for fresh context (same model, different session)
-- Additional backends can be added by implementing a `BackendSpec` in `config.py` and a thin async wrapper in `backends/`
+## When Council Adds Value
 
-## LLM Council (`packages/llm-council/`) — API
+- **Proofreading:** Different models catch different grammar/style issues
+- **Methodology critique:** Models have different reasoning patterns
+- **Code review:** Each may spot different bugs
 
-Uses OpenRouter for structured JSON output and programmatic integration:
+## When to Skip Council
 
-```bash
-cd packages/llm-council
-pip install -e .
-export OPENROUTER_API_KEY="sk-or-..."  # get one at https://openrouter.ai/keys
-```
-
-Requires an [OpenRouter](https://openrouter.ai/) account. One API key accesses Anthropic, OpenAI, and Google models. A council run (3 models) costs ~7 API calls. See the package's `README.md` for the full Python API reference.
+- **Math verification:** Use `domain-reviewer` agent instead
+- **Number checking:** Use `/replication-check`
+- **Simple tasks:** Council overhead (~30s) isn't worth it for quick questions

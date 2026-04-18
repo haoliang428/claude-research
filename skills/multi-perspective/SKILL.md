@@ -281,13 +281,11 @@ In standard mode, Phase 3 spawns Claude sub-agents with different personas — b
 **Trigger:** "Council multi-perspective" or "thorough multi-perspective"
 
 **What changes in council mode:**
-- Phase 3 (Parallel Investigation): Each perspective is assigned to a different LLM provider via `cli-council`, not Claude sub-agents
 - Phase 3.5 (Cross-Evaluation): Each model evaluates the others' perspectives without knowing which model produced which — genuine blind review
 - Phase 4 (Synthesis): Chairman model reads all perspectives and cross-evaluations, weighted by peer scores
 
 **Invocation (CLI backend):**
 ```bash
-cd packages/cli-council
 uv run python -m cli_council \
     --prompt-file /tmp/perspective-prompt.txt \
     --context-file /tmp/research-context.txt \

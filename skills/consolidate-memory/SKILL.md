@@ -32,7 +32,7 @@ Ask the user which mode to run:
 | Mode | Scope | What it does |
 |------|-------|-------------|
 | **Project** (default) | Single project's `MEMORY.md` + `.claude/state/personal-memory.md` | Consolidate both tiers |
-| **Global** | All `MEMORY.md` + personal-memory files across projects + Task Management | Consolidate all, cross-pollinate shared patterns |
+| **Global** | All `MEMORY.md` + personal-memory files across projects + workspace | Consolidate all, cross-pollinate shared patterns |
 
 ## Workflow
 
@@ -190,7 +190,7 @@ Standard sections from the `learn-tags` rule:
 
 ## Global MEMORY.md Location
 
-The Task Management MEMORY.md at the project root:
+The workspace MEMORY.md at the project root:
 ```
 $TM/MEMORY.md
 ```
