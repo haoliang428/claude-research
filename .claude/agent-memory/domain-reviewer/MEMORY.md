@@ -1,0 +1,1 @@
+- [AI Energy OT Project](ai-energy-ot-review.md) -- Kantorovich LP + Wasserstein DRO for carbon-aware dispatch; reviewed 2026-04-19

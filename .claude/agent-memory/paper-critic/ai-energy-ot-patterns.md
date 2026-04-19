@@ -4,16 +4,20 @@ description: Patterns and issues found in the AI Energy OT paper (carbon-aware d
 type: project
 ---
 
-## Key Issues Found (Round 1, 2026-04-13)
+## Key Issues Found
 
-- **Citation misattributions**: Dumas et al. (2022) cited for "Wasserstein GANs" but paper is about normalizing flows. chen2020rsome cited for HiGHS solver but is about RSOME toolbox. Check all citation-claim pairs carefully on subsequent rounds.
-- **DRO Lipschitz constraint**: The interpretation of ell_i <= lambda as "preventing load concentration" is an oversimplification. The actual mechanism bounds cost sensitivity to CI perturbations.
-- **Redundancy pattern**: Author tends to repeat motivation (energy stats, inference dominance) across abstract, intro, and Section 3.1. Flag if still present in future rounds.
-- **Bib key naming**: Several keys use given names instead of surnames (li2025carbonedge -> Wu is first author, xiang2023wasserstein -> Wei is first author, li2023equitable -> year is 2024 not 2023). Cosmetic but worth noting.
+### Round 1 (2026-04-13) -> Round 2 (2026-04-19)
+- **Dumas misattribution (C1)**: R1 said "Wasserstein GANs"; R2 fix over-corrected to "normalizing flows, GANs, and VAEs" -- still wrong. Paper is normalizing-flows ONLY. **Persists across 2 rounds.**
+- **HiGHS citation (C2)**: FIXED in R2 -- now cites huangfu2018highs correctly.
+- **DRO Lipschitz constraint (M1)**: Interpretation unchanged across 2 rounds. The conflation of "load cap" with "sensitivity bound" is a recurring conceptual issue in the writing.
+- **British/American mixing**: 2x "optimise" vs 19x "optimize" -- new finding in R2.
+- **Unused bib entries**: >55% of bib entries uncited. The bib is a master file (56 entries) but only ~25 are used in the paper.
+- **Float specifier warnings increased**: 5 in R1 -> 12 in R2 (paper grew from 23 to 28 pages).
 
 ## Project Conventions
 - Uses INFORMS IJDS template (informs4.cls)
 - natbib with author-year style
 - Notation follows locked registry in docs/research-design-lock.md Section 9
-- Paper has 23 pages, no stated page limit
+- Paper has 28 pages (grew from 23 in R1), no stated page limit
 - All experiments complete; paper is in writing/polishing stage
+- American English is the dominant convention (INFORMS standard)

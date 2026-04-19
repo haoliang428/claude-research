@@ -1,34 +1,26 @@
 # Current Focus — Claude Research Workspace
 
-> Last updated: 2026-04-18
+> Last updated: 2026-04-19
 
 ## Active Project
 
 **ai-energy-ot** — Carbon-Aware AI Workload Dispatch via Kantorovich LP and Wasserstein DRO
 - **Location:** `~/Desktop/ai-energy-ot/`
-- **Status:** Complete paper draft (23 pages), all experiments validated, ready for submission
-- **Venue:** Evaluating Applied Energy (IF 11.0), Energy and AI (IF 9.6), Omega (IF 6.9). IJDS VSI deprioritised (low IF).
-- **Context:** See `~/Desktop/ai-energy-ot/.context/current-focus.md` for full project state
+- **Status:** 28-page paper, 10 figures, 4 tables, 29 citations. Pre-submission report complete, all fixes applied. Ready to choose venue and submit.
+- **Venue:** Evaluating Applied Energy (IF 11.0) vs Energy and AI (IF 9.6)
+- **Context:** See `~/Desktop/ai-energy-ot/.context/progress.md` for full session details
 
-## What Was Done Recently (Apr 13–18)
+## What Was Done Recently (Apr 19)
 
-1. Wrote complete 23-page paper with all experiments validated and figures embedded
-2. Full quality audit: citation claims, bibliography, paper-critic, domain-reviewer — all issues fixed
-3. Restructured ai-energy-ot project: `code/lib/` shared library pattern
-4. Major overhaul of claude-research workspace: 38→30 skills, 6→5 agents, 9→7 rules, 8→4 hooks
-5. Added 8 new skills (paper-draft, experiment-runner, replication-check, venue-research, reading-notes, progress-log, council)
-6. Rewrote all docs, README, cleaned up stale code (.scripts/, .mcp-server-biblio/, llm-council)
-7. Wired up hooks in ~/.claude/settings.json, tested cli-council (Gemini + Claude working)
-8. Pushed both repos to GitHub
+1. Section 4 figure overhaul: all figures show B1-B5 with consistent legends, multi-benchmark robustness premium
+2. Abbreviations, inline sub-headers, British→American English, text-figure alignment — all fixed
+3. Dual price analysis added to §4.2 (shadow prices from LP solver)
+4. Proofread (14 categories, score ~95/100) + council review (5 issues resolved)
+5. Pre-submission report: paper-critic + domain-reviewer + bib-validator — 11 fixes applied (Dumas citation, DRO derivation gap, Lipschitz interpretation, spatial dominance qualifier, fleet extrapolation caveat, capacity model clarification, bib trimmed 74→29, float specifiers, intro deduplication)
+6. Template updates: proofread skill 11→14 checks, 5 feedback memories, broken hooks fixed
 
 ## Next Steps
 
-1. Choose target journal for ai-energy-ot (Applied Energy vs Energy and AI)
-2. Run `/proofread` + `/pre-submission-report` for final audit
-3. Submit paper
-
-## Workspace Infrastructure
-
-- MCP bibliography server: configured in `.mcp.json` (OpenAlex + Scopus)
-- 30 skills, 5 agents, 7 rules, 4 hooks — all functional
-- Research Vault at `~/Research-Vault`
+1. Choose venue (Applied Energy vs Energy and AI) — check page limits
+2. Venue-specific formatting if needed
+3. Git commit + submit

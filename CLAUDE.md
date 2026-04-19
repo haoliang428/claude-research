@@ -35,7 +35,7 @@ Read these context files:
 | "Find references on [topic]" | `/literature` — academic search with verified citations |
 | "Read this paper" | `/reading-notes` — structured notes with 8-dimension extraction |
 | "Write the methodology section" | `/paper-draft` — section-by-section drafting with conventions |
-| "Proofread my paper" | `/proofread` — quality check across 11 categories |
+| "Proofread my paper" | `/proofread` — quality check across 14 categories |
 | "Validate my bibliography" | `/bib-validate` — cross-references cite keys, DOIs, claims |
 | "Run the experiments" | `/experiment-runner` — run, generate figures, update paper |
 | "Is this ready to submit?" | `/pre-submission-report` — full audit (critic + domain + bib + claims) |

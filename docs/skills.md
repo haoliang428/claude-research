@@ -17,7 +17,7 @@ All skills live as flat directories under `skills/`. Each contains a `SKILL.md`.
 | `paper-draft` | Section-by-section drafting with quality conventions |
 | `latex` | Basic LaTeX compilation |
 | `latex-autofix` | Compile with auto error resolution + citation audit |
-| `proofread` | 11-category quality check + AI pattern density scan |
+| `proofread` | 14-category quality check + AI pattern density scan |
 
 ## Experiments
 | Skill | Purpose |

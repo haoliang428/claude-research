@@ -87,6 +87,26 @@
 |-------|-----------|-------|
 | Preprint cited when published version exists | -5 | Major — per instance. Suggest running `/bib-validate` for thorough check. |
 
+### Abbreviation Completeness (-5 to -15)
+
+| Issue | Deduction | Notes |
+|-------|-----------|-------|
+| Abbreviation used before definition (systematic, 3+ instances) | -15 | Critical — shows lack of proofreading |
+| Single abbreviation used before definition | -5 | Major — per instance |
+
+### Inline Sub-Headers (-5)
+
+| Issue | Deduction | Notes |
+|-------|-----------|-------|
+| `\emph{Title.}` used as paragraph-opening sub-header | -5 | Major — per instance. Should be flowing prose. |
+
+### Unfulfilled Forward References (-5 to -15)
+
+| Issue | Deduction | Notes |
+|-------|-----------|-------|
+| "We discuss X in Section Y" but X is not in Section Y | -15 | Critical — broken promise, reviewer will catch |
+| Forward reference to analysis that is thin or incomplete | -5 | Major — per instance |
+
 ## Category Mapping
 
 | Rubric category | SKILL.md check category |
@@ -102,3 +122,6 @@
 | Causal language | Check 9 |
 | Equation completeness | Check 10 |
 | Preprint staleness | Check 11 |
+| Abbreviation completeness | Check 12 |
+| Inline sub-headers | Check 13 |
+| Unfulfilled references | Check 14 |

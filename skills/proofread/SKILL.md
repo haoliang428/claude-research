@@ -1,6 +1,6 @@
 ---
 name: proofread
-description: "Use when you need academic proofreading of a LaTeX paper (11 check categories)."
+description: "Use when you need academic proofreading of a LaTeX paper (14 check categories)."
 allowed-tools: Read, Glob, Grep
 argument-hint: [project-path or tex-file]
 ---
@@ -26,7 +26,7 @@ argument-hint: [project-path or tex-file]
 
 1. **Locate files**: Find all `.tex` files in the project (and `.log` files for LaTeX diagnostics)
 2. **Read the document**: Read all `.tex` source files in order
-3. **Run 11 check categories** (below)
+3. **Run 14 check categories** (below)
 4. **Produce report**: Write `YYYY-MM-DD_PROOFREAD-REPORT.md` in `reviews/proofread/` under the project directory (create the directory if it does not exist). Do NOT overwrite previous reports — each review is dated.
 
 ## Check Categories
@@ -144,6 +144,34 @@ For every citation that looks like a preprint or working paper, check whether a 
 - **Action**: note the stale citation and suggest the published venue/year
 - **This is a lighter version of `/bib-validate`'s preprint check** — only flag obvious cases visible from the `.bib` or `\bibitem` entries. For thorough preprint checking, recommend running `/bib-validate` separately.
 
+### 12. Abbreviation Completeness
+
+Scan the entire document for abbreviations (2+ uppercase letters used as a word) and verify each is defined at first use.
+
+- **Grep for all-caps tokens** (LP, DRO, MOER, SLO, RTT, MILP, CDN, etc.) and check each has "(Full Name)" before its first occurrence
+- **Abstract and body are separate scopes** — abbreviations defined in the abstract should be re-defined at first body use
+- **Table-only abbreviations** (e.g., SA in a comparison table) can be defined in the table footnote
+- **Remove redundant re-definitions** — define once, use thereafter; don't re-expand in later sections
+- **Common misses**: abbreviations introduced in the literature review for other papers' methods, then used later without definition
+
+### 13. Inline Sub-Header Audit
+
+Check for `\emph{Title.}` or `\emph{Title:}` patterns used as paragraph-opening sub-headers. These should be rewritten as flowing prose transitions.
+
+- **Flagged pattern**: `\emph{Word(s).} Sentence continues...` at the start of a paragraph
+- **Acceptable**: `\item \emph{Label.}` inside enumerations (constraint/item labels)
+- **Acceptable**: `\emph{word}` for emphasis of a single word mid-sentence
+- **Fix**: rewrite with a transition sentence (e.g., `\emph{What limits B3?}` → "Despite these gains, B3 captures only a fraction of the theoretical maximum.")
+
+### 14. Unfulfilled Forward References
+
+Scan for forward references ("we discuss in Section X", "as we show below", "we report in the following section") and verify the promise is fulfilled.
+
+- **Grep for**: "we discuss", "we show in", "we report", "as noted in Section", "we describe in", "we analyze in"
+- **For each match**: follow the reference and verify the content actually exists in the target section
+- **Flag as Major**: any forward reference that points to content that doesn't exist
+- **Common pattern**: early sections promise analysis that was planned but never written, or was cut during revision
+
 ## Severity Levels
 
 | Level | Definition | Example |
@@ -185,6 +213,9 @@ Start at 100, deduct per issue found, apply verdict. Insert the Score Block into
 | Causal language | 0 | 0 | 0 |
 | Equation completeness | 0 | 0 | 0 |
 | Preprint staleness | 0 | 0 | 0 |
+| Abbreviation completeness | 0 | 0 | 0 |
+| Inline sub-headers | 0 | 0 | 0 |
+| Unfulfilled references | 0 | 0 | 0 |
 | **Total** | **0** | **0** | **0** |
 
 ## Critical Issues
@@ -224,7 +255,7 @@ In addition to the standard categories, check for these style issues (per user p
 
 - **No bullet-point findings in Introduction** — results should be flowing prose
 - **Minimal em-dashes** — only where they do real structural work (~1 per 4 pages)
-- **No boilerplate** — no "The remainder of the paper is organised as follows"
+- **No boilerplate** — no "The remainder of the paper is organized as follows"
 - **No "to our knowledge" claims** — cite the gap factually instead
 - **No stylistic italics** — keep \emph only for constraint/item labels in enumerations
 - **Flowing transitions** — sections should connect with transition sentences, not fragment with subsection headers (except Methodology where cross-references require labels)

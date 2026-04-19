@@ -40,7 +40,7 @@
 
 | Skill | Purpose |
 |-------|---------|
-| `proofread` | 7-category LaTeX proofreading scorecard (report only) |
+| `proofread` | 14-category LaTeX proofreading scorecard (report only) |
 | `claim-audit` | Verify cited claims against actual source papers |
 | `voice-analyzer` | Analyze writing samples to create a portable voice profile (VOICE.md) |
 | `voice-editor` | Edit content to match a voice profile (6-pass workflow, 4 editing modes) |

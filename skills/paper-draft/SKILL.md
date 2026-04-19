@@ -53,6 +53,7 @@ For a new paper, write sections in this order (methodology first, abstract last)
 - Every figure must be referenced in the text before it appears
 - Captions should be self-contained (a reader should understand the figure from the caption alone)
 - Use `\FloatBarrier` before sections to prevent figures from drifting past section boundaries
+- **Verify text after figure updates.** After regenerating any figure, re-read every text reference, caption, and number that cites it. Stale references are a common source of reviewer complaints.
 
 ## Section Templates
 
